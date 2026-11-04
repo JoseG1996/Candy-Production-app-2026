@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Ops Candy Production</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1220;color:white;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;padding:20px}
+main{max-width:540px;margin:auto}
+h1{font-size:27px;margin-bottom:5px}
+p{color:#aab6ca}
+.card{background:#192438;padding:18px;border-radius:16px;margin:16px 0}
+label{display:block;margin:14px 0 6px;color:#d8e2f1}
+input,select{width:100%;padding:13px;border:1px solid #45546b;border-radius:10px;background:#0d1728;color:white;font-size:18px}
+button{width:100%;padding:15px;background:#35b985;border:0;border-radius:12px;font-size:18px;font-weight:bold;margin-top:15px;color:#071a13}
+.result{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid #344158}
+.result strong{color:#65e3b0;text-align:right}
+small{color:#9daec4}
+</style>
+</head>
+<body>
+<main>
+<h1>🍫 Ops Production Calculator</h1>
+<p>Confectionery production planning</p>
+<div class="card">
+<label>Product name</label>
+<input id="product" placeholder="Dubai Pistachio Candy">
+<label>Target pieces</label>
+<input id="pieces" type="number" min="0" value="1700000">
+<label>Chocolate per piece (grams)</label>
+<input id="chocolate" type="number" min="0" step="any" value="10">
+<label>Filling per piece (grams)</label>
+<input id="filling" type="number" min="0" step="any" value="8">
+<label>Production loss percentage</label>
+<select id="loss">
+<option value="0">0%</option>
+<option value="5">5%</option>
+<option value="6">6%</option>
+<option value="10" selected>10%</option>
+<option value="15">15%</option>
+<option value="20">20%</option>
+</select>
+<button onclick="calculate()">Calculate Production</button>
+</div>
+<div class="card" id="results" aria-live="polite">
+<h2>Production Requirements</h2>
+<p>Enter your specifications and tap Calculate.</p>
+</div>
+<small>Calculations use 453.59237 grams per pound. Loss is calculated as a percentage of material used. Verify weights and recipes before ordering.</small>
+</main>
+<script>
+function fmt(n){return n.toLocaleString('en-US',{maximumFractionDigits:2})}
+function calculate(){
+const pieces=Number(document.getElementById('pieces').value);
+const chocolate=Number(document.getElementById('chocolate').value);
+const filling=Number(document.getElementById('filling').value);
+const loss=Number(document.getElementById('loss').value)/100;
+const result=document.getElementById('results');
+if(![pieces,chocolate,filling,loss].every(Number.isFinite)||pieces<=0||chocolate<0||filling<0||chocolate+filling<=0){
+result.innerHTML='<h2>Check your inputs</h2><p>Enter a positive piece count and valid ingredient weights.</p>';return;
+}
+const chocolateLbs=pieces*chocolate/453.59237/(1-loss);
+const fillingLbs=pieces*filling/453.59237/(1-loss);
+const total=chocolateLbs+fillingLbs;
+const product=document.getElementById('product').value.trim()||'Production Run';
+result.innerHTML='<h2>Production Requirements</h2><p id="productLabel"></p>'+
+'<div class="result"><span>Chocolate</span><strong>'+fmt(chocolateLbs)+' lbs</strong></div>'+
+'<div class="result"><span>Filling</span><strong>'+fmt(fillingLbs)+' lbs</strong></div>'+
+'<div class="result"><span>Total material</span><strong>'+fmt(total)+' lbs</strong></div>'+
+'<div class="result"><span>Finished target</span><strong>'+fmt(pieces)+' pieces</strong></div>'+
+'<div class="result"><span>Loss allowance</span><strong>'+fmt(total-(pieces*(chocolate+filling)/453.59237))+' lbs</strong></div>';
+document.getElementById('productLabel').textContent=product;
+}
+calculate();
+</script>
+</body>
+</html>

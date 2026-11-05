@@ -1,80 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#111827">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>Ops Candy Production</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#0b1220;color:white;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;padding:20px}
-main{max-width:540px;margin:auto}
-h1{font-size:27px;margin-bottom:5px}
-p{color:#aab6ca}
-.card{background:#192438;padding:18px;border-radius:16px;margin:16px 0}
-label{display:block;margin:14px 0 6px;color:#d8e2f1}
-input,select{width:100%;padding:13px;border:1px solid #45546b;border-radius:10px;background:#0d1728;color:white;font-size:18px}
-button{width:100%;padding:15px;background:#35b985;border:0;border-radius:12px;font-size:18px;font-weight:bold;margin-top:15px;color:#071a13}
-.result{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid #344158}
-.result strong{color:#65e3b0;text-align:right}
-small{color:#9daec4}
-</style>
-</head>
-<body>
-<main>
-<h1>🍫 Ops Production Calculator</h1>
-<p>Confectionery production planning</p>
-<div class="card">
-<label>Product name</label>
-<input id="product" placeholder="Dubai Pistachio Candy">
-<label>Target pieces</label>
-<input id="pieces" type="number" min="0" value="1700000">
-<label>Chocolate per piece (grams)</label>
-<input id="chocolate" type="number" min="0" step="any" value="10">
-<label>Filling per piece (grams)</label>
-<input id="filling" type="number" min="0" step="any" value="8">
-<label>Production loss percentage</label>
-<select id="loss">
-<option value="0">0%</option>
-<option value="5">5%</option>
-<option value="6">6%</option>
-<option value="10" selected>10%</option>
-<option value="15">15%</option>
-<option value="20">20%</option>
-</select>
-<button onclick="calculate()">Calculate Production</button>
-</div>
-<div class="card" id="results" aria-live="polite">
-<h2>Production Requirements</h2>
-<p>Enter your specifications and tap Calculate.</p>
-</div>
-<small>Calculations use 453.59237 grams per pound. Loss is calculated as a percentage of material used. Verify weights and recipes before ordering.</small>
-</main>
-<script>
-function fmt(n){return n.toLocaleString('en-US',{maximumFractionDigits:2})}
-function calculate(){
-const pieces=Number(document.getElementById('pieces').value);
-const chocolate=Number(document.getElementById('chocolate').value);
-const filling=Number(document.getElementById('filling').value);
-const loss=Number(document.getElementById('loss').value)/100;
-const result=document.getElementById('results');
-if(![pieces,chocolate,filling,loss].every(Number.isFinite)||pieces<=0||chocolate<0||filling<0||chocolate+filling<=0){
-result.innerHTML='<h2>Check your inputs</h2><p>Enter a positive piece count and valid ingredient weights.</p>';return;
-}
-const chocolateLbs=pieces*chocolate/453.59237/(1-loss);
-const fillingLbs=pieces*filling/453.59237/(1-loss);
-const total=chocolateLbs+fillingLbs;
-const product=document.getElementById('product').value.trim()||'Production Run';
-result.innerHTML='<h2>Production Requirements</h2><p id="productLabel"></p>'+
-'<div class="result"><span>Chocolate</span><strong>'+fmt(chocolateLbs)+' lbs</strong></div>'+
-'<div class="result"><span>Filling</span><strong>'+fmt(fillingLbs)+' lbs</strong></div>'+
-'<div class="result"><span>Total material</span><strong>'+fmt(total)+' lbs</strong></div>'+
-'<div class="result"><span>Finished target</span><strong>'+fmt(pieces)+' pieces</strong></div>'+
-'<div class="result"><span>Loss allowance</span><strong>'+fmt(total-(pieces*(chocolate+filling)/453.59237))+' lbs</strong></div>';
-document.getElementById('productLabel').textContent=product;
-}
-calculate();
-</script>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111827"><meta name="apple-mobile-web-app-capable" content="yes"><title>Ops Candy Production</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#fff;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;padding:16px}main{max-width:600px;margin:auto}h1{font-size:25px;margin:10px 0 4px}h2{font-size:20px}p,small{color:#aab6ca}small{font-size:12px}.card{background:#192438;padding:17px;border-radius:16px;margin:14px 0}label{display:block;margin:12px 0 6px;color:#d8e2f1}input,select,textarea{width:100%;padding:12px;border:1px solid #45546b;border-radius:10px;background:#0d1728;color:white;font-size:16px}textarea{min-height:70px}button{width:100%;padding:13px;background:#35b985;border:0;border-radius:11px;font-size:16px;font-weight:700;margin-top:12px;color:#071a13}button.secondary{background:#34455f;color:white}button.danger{background:#653b47;color:white}.tabs{display:flex;gap:8px;margin:16px 0}.tabs button{font-size:13px;padding:11px 5px;margin:0;background:#25354e;color:#d8e2f1}.tabs button.active{background:#35b985;color:#071a13}.result{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #344158}.result strong{color:#65e3b0;text-align:right}.hidden{display:none}.recipe-table{width:100%;border-collapse:collapse;font-size:13px}.recipe-table th,.recipe-table td{padding:9px 5px;border-bottom:1px solid #344158;text-align:left}.recipe-table th:last-child,.recipe-table td:last-child{text-align:right}.recipe-table td:nth-child(2){text-align:right}.muted{color:#9daec4;font-size:12px}.photo{width:100%;border-radius:12px;margin-top:10px}.pill{display:inline-block;background:#30445a;border-radius:20px;padding:5px 10px;color:#c7d7e7;font-size:12px}.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}a{color:#65e3b0}</style></head><body><main><h1>🍫 Ops Candy Production</h1><p>Production calculator · Recipes · Batch scaling</p><div class="tabs"><button class="active" onclick="tab('production',this)">Production</button><button onclick="tab('recipes',this)">Recipes</button><button onclick="tab('add',this)">Add Recipe</button></div><section id="production"><div class="card"><h2>Production Calculator</h2><label>Product name</label><input id="product" placeholder="Dubai Pistachio Candy"><label>Target pieces</label><input id="pieces" type="number" min="0" value="1700000"><label>Chocolate per piece (grams)</label><input id="chocolate" type="number" min="0" step="any" value="10"><label>Filling per piece (grams)</label><input id="filling" type="number" min="0" step="any" value="8"><label>Production loss percentage</label><select id="loss"><option value="0">0%</option><option value="5">5%</option><option value="6">6%</option><option value="10" selected>10%</option><option value="15">15%</option><option value="20">20%</option></select><button onclick="calculate()">Calculate Production</button></div><div class="card" id="results" aria-live="polite"></div><small>453.59237 grams per pound. Production loss is modeled as material loss (required material = net material ÷ (1 − loss rate)). Verify production assumptions before ordering.</small></section><section id="recipes" class="hidden"><div class="card"><h2>Recipe Library</h2><label>Choose recipe</label><select id="recipeSelect" onchange="renderRecipe()"></select><div id="recipeView"></div></div></section><section id="add" class="hidden"><div class="card"><h2>Add a Recipe</h2><p>Save a recipe with its original photo and optional ingredient weights. Photos are stored on this device in this app's browser storage.</p><label>Recipe name</label><input id="newName" placeholder="Recipe name"><label>Base batch (lbs)</label><input id="newBatch" type="number" min="0.01" step="any" value="200"><label>Ingredients (one per line: ingredient, pounds)</label><textarea id="newIngredients" placeholder="Sugar, 50&#10;Cocoa butter, 20"></textarea><label>Notes / process instructions</label><textarea id="newNotes"></textarea><label>Original recipe picture</label><input id="newPhoto" type="file" accept="image/*"><button onclick="saveRecipe()">Save Recipe</button><p class="muted">For long-term backup, keep the original photos in your Photos app or GitHub. Browser storage can be cleared and does not sync across devices.</p><p id="saveMessage" role="status"></p></div></section></main><script>
+const KEY='ops-recipes-v2';const starter={id:'dubai-pistachio',name:'Rolling Pin Dubai Pistachio Filling',batch:200,notes:'Photo shows: Heat palm oil to 110–120°F separately in holding kettle. Remaining process instructions are not fully visible in the supplied photo; verify against the approved master recipe. Rework: 10 lb (5% of base), listed separately; total with rework 210 lb.',ingredients:[{name:'10X Powdered Sugar',sku:'I74102-SWT',lbs:78.14},{name:'Non Fat Milk Powder',sku:'I74272-PWD',lbs:10},{name:'Roasted Pistachio Paste',sku:'84059',lbs:64.08},{name:'Natural Palm Oil Agrident 36-39',sku:'I74337-FTOL',lbs:3.6},{name:'Cebes 21-20 Palm Kernel Oil',sku:'I74310-FTOL',lbs:32.4},{name:'Soy Lecithin',sku:'I9854-ADD',lbs:1.78},{name:'Knafeh Bread Shreds - KADAYIF',sku:'I74347 / I74338',lbs:10}],rework:10};
+let recipes=[];try{recipes=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){}if(!Array.isArray(recipes))recipes=[];if(!recipes.some(r=>r.id===starter.id))recipes.unshift(starter);
+function fmt(n){return Number(n).toLocaleString('en-US',{maximumFractionDigits:2})}function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function tab(id,btn){for(const el of document.querySelectorAll('main section'))el.classList.toggle('hidden',el.id!==id);for(const el of document.querySelectorAll('.tabs button'))el.classList.toggle('active',el===btn);if(id==='recipes')renderRecipe()}
+function calculate(){const pieces=Number(document.getElementById('pieces').value),chocolate=Number(document.getElementById('chocolate').value),filling=Number(document.getElementById('filling').value),loss=Number(document.getElementById('loss').value)/100,result=document.getElementById('results');if(![pieces,chocolate,filling,loss].every(Number.isFinite)||pieces<=0||chocolate<0||filling<0||chocolate+filling<=0||loss>=1){result.innerHTML='<h2>Check your inputs</h2><p>Enter a positive piece count and valid ingredient weights.</p>';return}const c=pieces*chocolate/453.59237/(1-loss),f=pieces*filling/453.59237/(1-loss),total=c+f;result.innerHTML='<h2>Production Requirements</h2><p id="productLabel"></p>'+[['Chocolate',c+' lbs'],['Filling',f+' lbs'],['Total material',total+' lbs'],['Finished target',pieces+' pieces'],['Loss allowance',total-(pieces*(chocolate+filling)/453.59237)+' lbs']].map(([name,value])=>'<div class="result"><span>'+name+'</span><strong>'+fmt(parseFloat(value))+' '+(name==='Finished target'?'pieces':'lbs')+'</strong></div>').join('');document.getElementById('productLabel').textContent=document.getElementById('product').value.trim()||'Production Run'}
+function populate(){const s=document.getElementById('recipeSelect'),old=s.value;s.innerHTML=recipes.map(r=>'<option value="'+esc(r.id)+'">'+esc(r.name)+'</option>').join('');if(recipes.some(r=>r.id===old))s.value=old}function renderRecipe(){populate();const r=recipes.find(x=>x.id===document.getElementById('recipeSelect').value)||recipes[0],v=document.getElementById('recipeView');if(!r)return;let target=Number(document.getElementById('scaleBatch')?.value);if(!Number.isFinite(target)||target<=0||document.getElementById('shownRecipe')?.value!==r.id)target=r.batch;const ratio=target/r.batch;v.innerHTML='<input type="hidden" id="shownRecipe" value="'+esc(r.id)+'"><h2>'+esc(r.name)+'</h2><span class="pill">Base batch: '+fmt(r.batch)+' lbs</span><label>Desired batch weight (lbs), excluding rework</label><input id="scaleBatch" type="number" min="0.01" step="any" value="'+target+'" oninput="updateScale()"><div id="scaled"></div><h3>Process / Notes</h3><p style="white-space:pre-wrap">'+esc(r.notes||'No notes added.')+'</p>'+(r.photo?'<h3>Original Recipe Photo</h3><img class="photo" alt="Original recipe photograph" src="'+r.photo+'"><a href="'+r.photo+'" target="_blank" rel="noopener">Open full-size photo</a>':'<p class="muted">No original photo attached yet.</p>')+(r.id===starter.id?'<p class="muted">To attach the original photo, add a new recipe entry with the same information and upload your photo. The starter card is a transcription, not the original photo.</p>':'')+'<button class="secondary" onclick="exportRecipe()">Export Recipe Backup</button>'+(r.id!==starter.id?'<button class="danger" onclick="deleteRecipe()">Delete This Recipe</button>':'');updateScale()}
+function updateScale(){const r=recipes.find(x=>x.id===document.getElementById('recipeSelect').value);if(!r)return;const target=Number(document.getElementById('scaleBatch').value),out=document.getElementById('scaled');if(!Number.isFinite(target)||target<=0){out.textContent='Enter a positive batch weight.';return}const ratio=target/r.batch;out.innerHTML='<table class="recipe-table"><thead><tr><th>Ingredient / SKU</th><th>%</th><th>lbs</th></tr></thead><tbody>'+r.ingredients.map(i=>'<tr><td>'+esc(i.name)+(i.sku?'<div class="muted">'+esc(i.sku)+'</div>':'')+'</td><td>'+fmt(i.lbs/r.batch*100)+'%</td><td>'+fmt(i.lbs*ratio)+'</td></tr>').join('')+'</tbody></table><div class="result"><span>Fresh batch</span><strong>'+fmt(target)+' lbs</strong></div>'+(r.rework?'<div class="result"><span>Optional rework (separate)</span><strong>'+fmt(r.rework*ratio)+' lbs</strong></div><div class="result"><span>Total including rework</span><strong>'+fmt((r.batch+r.rework)*ratio)+' lbs</strong></div>':'')+'<p class="muted">Amounts scale from the stored base formula. Confirm ingredient totals and rework authorization against approved specifications.</p>'}
+function saveRecipe(){const name=document.getElementById('newName').value.trim(),batch=Number(document.getElementById('newBatch').value),notes=document.getElementById('newNotes').value,raw=document.getElementById('newIngredients').value.trim(),file=document.getElementById('newPhoto').files[0],message=document.getElementById('saveMessage');if(!name||!Number.isFinite(batch)||batch<=0){message.textContent='Enter a recipe name and positive base batch weight.';return}const ingredients=[];for(const line of raw.split('\n').filter(x=>x.trim())){const at=line.lastIndexOf(','),lbs=Number(line.slice(at+1).trim());if(at<1||!Number.isFinite(lbs)||lbs<0){message.textContent='Use one ingredient per line: ingredient name, pounds';return}ingredients.push({name:line.slice(0,at).trim(),lbs})}if(ingredients.length&&Math.abs(ingredients.reduce((s,i)=>s+i.lbs,0)-batch)>.05){message.textContent='Ingredient weights must add up to the base batch weight. Check your entries.';return}const save=photo=>{const item={id:'recipe-'+Date.now(),name,batch,notes,ingredients,rework:0,photo};recipes.push(item);try{localStorage.setItem(KEY,JSON.stringify(recipes))}catch(e){recipes.pop();message.textContent='Device storage is full. Try a smaller photo or back up existing recipes.';return}message.textContent='Recipe saved on this device.';populate();document.getElementById('recipeSelect').value=item.id;tab('recipes',document.querySelectorAll('.tabs button')[1])};if(!file){save('');return}if(file.size>8*1024*1024){message.textContent='Choose a photo smaller than 8 MB.';return}const reader=new FileReader();reader.onload=()=>save(reader.result);reader.onerror=()=>message.textContent='Could not read the picture.';reader.readAsDataURL(file)}
+function exportRecipe(){const r=recipes.find(x=>x.id===document.getElementById('recipeSelect').value);const blob=new Blob([JSON.stringify(r,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=r.name.replace(/[^a-z0-9]+/gi,'-')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}function deleteRecipe(){const id=document.getElementById('recipeSelect').value;if(!confirm('Delete this recipe from this device?'))return;recipes=recipes.filter(r=>r.id!==id);localStorage.setItem(KEY,JSON.stringify(recipes.filter(r=>r.id!==starter.id)));renderRecipe()}
+calculate();populate();</script></body></html>
